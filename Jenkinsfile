@@ -5,7 +5,7 @@ node {
         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
     }
     stage('DeployToStaging'){
-        if (CURRENT_BRANCH == 'master'){
+        if (env.BRANCH_NAME == 'master'){
             withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     sshPublisher(
                         failOnError: true,
@@ -32,7 +32,7 @@ node {
         }
     }
     stage('DeployToProduction'){
-        if (CURRENT_BRANCH == 'master'){
+        if (env.BRANCH_NAME == 'master'){
         input 'Does the staging environment look OK?'
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
